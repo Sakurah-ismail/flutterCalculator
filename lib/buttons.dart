@@ -8,8 +8,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var test;
   static var userQuestion = '';
-  var answer; //used to compute
-  var displayAnswer = ''; //display final answer
+  var answer; 
+  var displayAnswer = ''; 
   var colourTheme = Colors.deepPurple;
 
    late List<String> finalElements;
@@ -20,33 +20,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
     editQuestion = userQuestion;
 
-    for (var i = 0; i < editQuestion.length - 2; i++) {                         //check for Double Negation
-      if (editQuestion[i] == '-' && editQuestion[i + 1] == '-') {               // 1--2 -> 1+2
+    for (var i = 0; i < editQuestion.length - 2; i++) {                         
+      if (editQuestion[i] == '-' && editQuestion[i + 1] == '-') {               
         editQuestion = editQuestion.substring(0, i) +
             '+' +
             editQuestion.substring(i + 2, editQuestion.length);
       }
     }
 
-    for (var i = 1; i < editQuestion.length; i++) {                             //check for double plus
-      if (editQuestion[i] == '+' && editQuestion[i - 1] == '+') {               // 1+++2 -> 1+0+0+0+2
+    for (var i = 1; i < editQuestion.length; i++) {                             
+      if (editQuestion[i] == '+' && editQuestion[i - 1] == '+') {               
         editQuestion = editQuestion.substring(0, i) +
             '0' +
             editQuestion.substring(i, editQuestion.length);
       }
     }
 
-    // +9 becomes 0+9
+    
     if (editQuestion[0] == '+') {
       editQuestion = '0' + editQuestion;
     }
 
-    //if the question starts with a number, add +0, this just helps with the addition functions
+    
     if (startsWithNumber(editQuestion)) {
       editQuestion = '0+' + editQuestion;
     }
 
-    //check if there's a '-' sign, execute subtraction
     for (var i = 0; i < editQuestion.length; i++) {
       if (editQuestion[i] == '-') {
         setState(() {
@@ -56,17 +55,17 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
 
-    //break up numbers separated by +
+   
     finalElements = editQuestion.split("+");
 
-    //this helps with multiplicativeOperation that uses split(x), there needs to be an x
+     
     for ( var i = 0 ; i < finalElements.length ; i++ ) {
       if ( finalElements[i].contains('/') ) {
         finalElements[i] = "1×" + finalElements[i];
       }
     }
 
-    //if theres a x symbol, execute multiplication
+    
     for (var i = 0; i < finalElements.length; i++) {
       if (finalElements[i].contains('×')) {
         setState(() {
@@ -76,7 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
 
-    //if there exists a '+' sign, execute addition
     for (var i = 0; i < editQuestion.length; i++) {
       if (editQuestion[i] == '+') {
         setState(() {
@@ -100,8 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       answer = answer + double.parse(finalElements[i]);
     }
   }
-
-  //place a plus symbol infront of negative sign only if it doesn't have a sign before it
+ 
   void _operateSubtraction() {
     for (var i = 1; i < editQuestion.length; i++) {
       if (editQuestion[i] == '-' && !isOperator(editQuestion[i - 1])) {
@@ -136,7 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
       if (finalElements[i].contains("×")) {
         List<String> multiplicativeElements = finalElements[i].split("×");
 
-        //compute division first, then multiplication
         for (var k = 0; k < multiplicativeElements.length; k++) {
           if (multiplicativeElements[k].contains('/')) {
             multiplicativeElements[k] =
